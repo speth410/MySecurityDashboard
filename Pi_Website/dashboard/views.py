@@ -7,5 +7,5 @@ def login(request):
     return HttpResponse('<h1>Login</h1>')
 
 def dashboard(request):
-    return HttpResponse('<h1>Dashboard</h1>')
+    return render(request, 'dashboard/dashboard.html')
 
