@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class LoginConfig(AppConfig):
-    name = 'login'
+class DashboardConfig(AppConfig):
+    name = 'dashboard'
