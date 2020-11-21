@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>
 
-        </title>
-    </head>
+{% extends "dashboard/base.html" %}
+
     <body>
-        <h1>Dashboard!!!</h1>
+        
 
-        {% for users in userInfo %}
-        <h2>Welcome: {{ users.username }} </h2>
-        {% endfor %}
+        {% block content %}
+        <h1>Dashboard!!!</h1>
+            <h2>Welcome: {{ user.get_username }} </h2>
+          
+            
+        {% endblock %}
     </body>
-</html>
