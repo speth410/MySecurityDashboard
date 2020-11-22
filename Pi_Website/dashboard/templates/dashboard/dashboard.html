@@ -1,13 +1,17 @@
-
 {% extends "dashboard/base.html" %}
 
-    <body>
-        
-
-        {% block content %}
-        <h1>Dashboard!!!</h1>
-            <h2>Welcome: {{ user.get_username }} </h2>
-          
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8  offset-lg-2">
+            <h3 class="mt-5">Dashboard</h3>
+            <ul>
+            {% for camera in cameras %}
+                <li>{{ camera }}</li>
+            {% endfor %}    
+            </ul>
             
-        {% endblock %}
-    </body>
+        </div>
+    </div>
+</div>
+{% endblock %}
