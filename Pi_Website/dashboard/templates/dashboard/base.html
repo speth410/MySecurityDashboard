@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <title>MySecurityDashboard</title>
    
     <meta charset="utf-8">
@@ -30,6 +30,7 @@
                         <li><a href="{% url 'dashboard:logout' %}">logout</a></li>
 
                      {% else %}
+                        <li><a href="{% url 'dashboard:view_cameras' %}">View Streams</a></li>
                         <li><a href= "{% url 'dashboard:registerView' %}">register</a></li>
                         <li><a href="{% url 'dashboard:user_login' %}">Login</a></li>
                     {% endif %}

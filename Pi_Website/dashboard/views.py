@@ -52,8 +52,8 @@ def addStream(stream_url):
     streams.append(VideoCamera(stream_url))
 
 
-#addStream('rtsp://192.168.0.34:8554/mjpeg/1')
-addStream('rtsp://wowzaec2demo.streamlock.net/vod/mp4:BigBuckBunny')
+addStream('rtsp://192.168.0.37:8554/mjpeg/1')
+#addStream('rtsp://wowzaec2demo.streamlock.net/vod/mp4')
 
 # Create your views here.
 
@@ -80,10 +80,12 @@ def video_feed(request):
 
 def dashboard(request):
 
-    #camera.release()
-    cv2.destroyAllWindows()
     cameras = {'cameras': util.scanNetwork()}
-    return render(request, 'dashboard/dashboard.html', cameras)
+    return render(request, 'dashboard/dashboard.html')
+    #camera.release()
+    #cv2.destroyAllWindows()
+    #cameras = {'cameras': util.scanNetwork()}
+    #return render(request, 'dashboard/dashboard.html', cameras)
 
 def view_cameras(request):
     #camera = cv2.VideoCapture('rtsp://wowzaec2demo.streamlock.net/vod/mp4')
