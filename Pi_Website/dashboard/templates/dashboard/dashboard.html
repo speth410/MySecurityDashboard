@@ -17,8 +17,8 @@
                 <div class="panel-heading">Connected Cameras</div>
                 <div class="panel-body">
                     <ul>
-                    {% for camera in cameras %}
-                        <li>{{ camera }}</li>
+                    {% for streams in connectedStreams %}
+                        <li>{{ streams }}</li>
                     {% endfor %}    
                     </ul>
                 </div>
@@ -48,15 +48,17 @@
                     <br>
                     <div class="well">Cameras Found:</div>
                     {% for camera in cameras %}
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <input type="text" value="{{ camera }}", readonly>
-                                <label>{{ camera }}</label>
-                            </div >
-                            <div class="col-xs-6">
-                                <button type="button" class="btn btn-primary">Add</button>
+                        <form action="{% url 'dashboard:addCamera' %}" method="post">
+                        {% csrf_token %}
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <input name="stream_url" type="text" value="{{ camera }}", readonly>
+                                    
+                                </div >
+                                <div class="col-xs-6">
+                                    <input name="add" type="submit" value="Add" class="btn btn-primary">
+                                </div>
                             </div>
-                        </div>
                     {% endfor %}
                 </div>
             </div>

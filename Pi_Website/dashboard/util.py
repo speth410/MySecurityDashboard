@@ -17,44 +17,47 @@ cameras = []
 port_num = 8554
 
 class VideoCamera(object):
-    stream_url = ""
-    stream_name = ""
-    stream = True
+   stream_url = ""
+   stream_name = ""
+   stream = True
 
-    def __init__(self, stream_url):
-        self.stream_url = stream_url
+   def __init__(self, stream_url):
+      self.stream_url = stream_url
 
-    def getVideoCapture(self):
-        return self.video
+   def getVideoCapture(self):
+      return self.video
+   
+   def getStreamURL(self):
+      return self.stream_url
 
-    def gen_frames(self):
-        try:
-            self.video = cv2.VideoCapture('rtsp://wowzaec2demo.streamlock.net/vod/mp4')
+   def gen_frames(self):
+      try:
+         self.video = cv2.VideoCapture(self.stream_url)
 
-            while (True):
-                # Capture frame-by-frame
-                success, frame = self.video.read()  # read the camera frame
-                if frame is None:
-                    print("\nEmpty Frame!!!!!!!!!!\n")
-                if not success:
-                    print("ERROR STOPPING STREAM")
-                    break
-                else:
-                    ret, buffer = cv2.imencode('.jpg', frame)
-                    frame = buffer.tobytes()
-                    yield (b'--frame\r\n'
-                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+         while (True):
+            # Capture frame-by-frame
+            success, frame = self.video.read()  # read the camera frame
+            if frame is None:
+               print("\nEmpty Frame!!!!!!!!!!\n")
+            if not success:
+               print("ERROR STOPPING STREAM")
+               break
+            else:
+               ret, buffer = cv2.imencode('.jpg', frame)
+               frame = buffer.tobytes()
+               yield (b'--frame\r\n'
+                  b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
 
-            self.video.release()
-            cv2.destroyAllWindows()
-        except socket.timeout as err:
-            print(err)
+         self.video.release()
+         cv2.destroyAllWindows()
+      except socket.timeout as err:
+         print(err)
 
-    def stopStream(self):
-        self.stream = False
-    def startStream(self):
-        self.stream = True
-        self.video = cv2.VideoCapture(self.stream_url)
+   def stopStream(self):
+      self.stream = False
+   def startStream(self):
+      self.stream = True
+      self.video = cv2.VideoCapture(self.stream_url)
 
 # define our port scan process
 def portscan(host):

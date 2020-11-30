@@ -18,9 +18,25 @@ streams = []
 def addStream(stream_url):
     streams.append(util.VideoCamera(stream_url))
 
-
 #addStream('rtsp://192.168.0.37:8554/mjpeg/1')
 addStream('rtsp://wowzaec2demo.streamlock.net/vod/mp4')
+
+def addCamera(request):
+
+    if request.method == 'POST':
+        new_stream = request.POST['stream_url']
+
+        streams.append(util.VideoCamera(new_stream))
+
+    for i in range(len(streams)):
+           urls = [streams[i].getStreamURL()]
+        
+    connectedStreams = {'streams': urls}
+    print (connectedStreams)
+
+    return render(request, 'dashboard/dashboard.html', connectedStreams)
+
+
 
 # Create your views here.
 
