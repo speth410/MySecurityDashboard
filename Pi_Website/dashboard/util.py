@@ -2,6 +2,7 @@ import socket  # as we are opening sockets, need the module
 import time # time our script
 import threading # we want to multi thread this 
 from queue import Queue # and have queue management
+import cv2
 
 
 # create queue and threader      
@@ -12,6 +13,46 @@ socket.setdefaulttimeout(0.55)
 print_lock = threading.Lock()
 
 cameras = []
+
+class VideoCamera(object):
+    stream_url = ""
+    stream_name = ""
+    stream = True
+
+    def __init__(self, stream_url):
+        self.stream_url = stream_url
+
+    def getVideoCapture(self):
+        return self.video
+
+    def gen_frames(self):
+        try:
+            self.video = cv2.VideoCapture('rtsp://wowzaec2demo.streamlock.net/vod/mp4')
+
+            while (True):
+                # Capture frame-by-frame
+                success, frame = self.video.read()  # read the camera frame
+                if frame is None:
+                    print("\nEmpty Frame!!!!!!!!!!\n")
+                if not success:
+                    print("ERROR STOPPING STREAM")
+                    break
+                else:
+                    ret, buffer = cv2.imencode('.jpg', frame)
+                    frame = buffer.tobytes()
+                    yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
+
+            self.video.release()
+            cv2.destroyAllWindows()
+        except socket.timeout as err:
+            print(err)
+
+    def stopStream(self):
+        self.stream = False
+    def startStream(self):
+        self.stream = True
+        self.video = cv2.VideoCapture(self.stream_url)
 
 # define our port scan process
 def portscan(host):
@@ -50,7 +91,7 @@ def threader():
 
 def scanNetwork():
 
-    
+   #cameras = []
    base_ip = "192.168.0."
    print ('Scanning Network for Open Ports: ', base_ip)
     

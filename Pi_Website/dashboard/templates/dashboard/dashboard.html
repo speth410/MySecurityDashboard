@@ -1,15 +1,63 @@
 {% extends "dashboard/base.html" %}
 
 {% block content %}
+<style>
+    btn-scan{
+        position:absolute;
+        bottom:0
+    }
+</style>
 <div class="container">
     <div class="row">
         <div class="col-lg-8  offset-lg-2">
             <h3 class="mt-5">Dashboard</h3>
-            <ul>
-            {% for camera in cameras %}
-                <li>{{ camera }}</li>
-            {% endfor %}    
-            </ul>
+
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Connected Cameras</div>
+                <div class="panel-body">
+                    <ul>
+                    {% for camera in cameras %}
+                        <li>{{ camera }}</li>
+                    {% endfor %}    
+                    </ul>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">Find/Add Cameras</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <label for="ip_addr">Base address: </label>
+                            <input class="form-control" id="ip_addr" type="text" value="192.168.0.1">
+                        </div>
+
+                        <div class="col-xs-2">
+                            <label for="port_num">Port: </label>
+                            <input class="form-control" id="port_num" type="text" value="8554">
+                        </div>
+                        <div class="col-xs-6">
+                            <a class="btn btn-primary" href="{% url 'dashboard:scan' %}">Scan</a>
+                        </div>
+                    </div>
+                    
+                    <br>
+                    <div class="well">Cameras Found:</div>
+                    {% for camera in cameras %}
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label>{{ camera }}</label>
+                            </div>
+                            <div class="col-xs-6">
+                                <button type="button" class="btn btn-primary">Add</button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+
             
         </div>
     </div>

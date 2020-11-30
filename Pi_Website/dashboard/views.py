@@ -9,83 +9,32 @@ from django.contrib.auth import authenticate, login
 from . import util
 import cv2
 import time
+import socket
 
 streams = []
 
-class VideoCamera(object):
-    stream_url = ""
-    stream_name = ""
-    stream = True
 
-    def __init__(self, stream_url):
-        self.stream_url = stream_url
-
-    def getVideoCapture(self):
-        return self.video
-
-    def gen_frames(self):
-        self.video = cv2.VideoCapture(self.stream_url)
-
-        while self.stream == True:
-            # Capture frame-by-frame
-            
-            success, frame = self.video.read()  # read the camera frame
-            if not success:
-                print("ERROR STOPPING STREAM")
-                break
-            else:
-                ret, buffer = cv2.imencode('.jpg', frame)
-                frame = buffer.tobytes()
-                yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-
-        self.video.release()
-        cv2.destroyAllWindows()
-
-    def stopStream(self):
-        self.stream = False
-    def startStream(self):
-        self.stream = True
-        self.video = cv2.VideoCapture(self.stream_url)
 
 def addStream(stream_url):
-    streams.append(VideoCamera(stream_url))
+    streams.append(util.VideoCamera(stream_url))
 
 
-addStream('rtsp://192.168.0.37:8554/mjpeg/1')
-#addStream('rtsp://wowzaec2demo.streamlock.net/vod/mp4')
+#addStream('rtsp://192.168.0.37:8554/mjpeg/1')
+addStream('rtsp://wowzaec2demo.streamlock.net/vod/mp4')
 
 # Create your views here.
-
-def gen_frames(camera):  # generate frame by frame from camera
-    while True:
-        # Capture frame-by-frame
-        success, frame = camera.read()  # read the camera frame
-        if not success:
-            print("error")
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpg', frame)
-            frame = buffer.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
-
-    camera.release()
-    cv2.destroyAllWindows()
 
 def video_feed(request):
 
     return StreamingHttpResponse(streams[0].gen_frames(), content_type='multipart/x-mixed-replace; boundary=frame')
 
+
 @login_required(login_url='login/')
 def dashboard(request):
 
-    cameras = {'cameras': util.scanNetwork()}
-    return render(request, 'dashboard/dashboard.html', cameras)
-    #camera.release()
-    #cv2.destroyAllWindows()
     #cameras = {'cameras': util.scanNetwork()}
-    #return render(request, 'dashboard/dashboard.html', cameras)
+    return render(request, 'dashboard/dashboard.html')
+
 
 def view_cameras(request):
     #camera = cv2.VideoCapture('rtsp://wowzaec2demo.streamlock.net/vod/mp4')
@@ -128,5 +77,9 @@ def registerView(request):
         form = UserCreationForm()
 
         return render(request, 'dashboard/register.html',{'form':form})
+
+def scan(request):
+    cameras = {'cameras': util.scanNetwork()}
+    return render(request, 'dashboard/dashboard.html', cameras)
 
 

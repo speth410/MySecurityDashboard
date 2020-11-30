@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Pi_Website',
-    'Pi_Website.dashboard',
+    'dashboard',
+    #'Pi_Website.dashboard',
     #'dashboard.apps.DashboardConfig',
 ]
 
@@ -55,7 +56,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Pi_Website.Pi_Website.urls'
+#ROOT_URLCONF = 'Pi_Website.Pi_Website.urls'
+ROOT_URLCONF = 'Pi_Website.urls'
 
 TEMPLATES = [
     {
