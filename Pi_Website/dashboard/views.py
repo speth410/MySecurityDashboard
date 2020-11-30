@@ -79,7 +79,15 @@ def registerView(request):
         return render(request, 'dashboard/register.html',{'form':form})
 
 def scan(request):
-    cameras = {'cameras': util.scanNetwork()}
-    return render(request, 'dashboard/dashboard.html', cameras)
+    if request.method == 'POST':
+        ip = request.POST['ip_addr']
+        port = request.POST['port_num']
+
+        cameras = {'cameras': util.scanNetwork(ip, port)}
+        return render(request, 'dashboard/dashboard.html', cameras)
+    
+    else:
+        cameras = {'cameras': util.scanNetwork()}
+        return render(request, 'dashboard/dashboard.html', cameras)
 
 

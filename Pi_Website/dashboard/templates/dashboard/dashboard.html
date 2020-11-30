@@ -27,28 +27,32 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Find/Add Cameras</div>
                 <div class="panel-body">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <label for="ip_addr">Base address: </label>
-                            <input class="form-control" id="ip_addr" type="text" value="192.168.0.1">
-                        </div>
+                    <form action="{% url 'dashboard:scan' %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <label for="ip_addr">Base address: </label>
+                                <input name="ip_addr" class="form-control" id="ip_addr" type="text" value="192.168.0.">
+                            </div>
 
-                        <div class="col-xs-2">
-                            <label for="port_num">Port: </label>
-                            <input class="form-control" id="port_num" type="text" value="8554">
+                            <div class="col-xs-2">
+                                <label for="port_num">Port: </label>
+                                <input name="port_num" class="form-control" id="port_num" type="text" value="8554">
+                            </div>
+                            <div class="col-xs-6">
+                                <input name="scan" type="submit" value="Scan" class="btn btn-primary"/>
+                            </div>
                         </div>
-                        <div class="col-xs-6">
-                            <a class="btn btn-primary" href="{% url 'dashboard:scan' %}">Scan</a>
-                        </div>
-                    </div>
+                    </form>
                     
                     <br>
                     <div class="well">Cameras Found:</div>
                     {% for camera in cameras %}
                         <div class="row">
                             <div class="col-xs-6">
+                                <input type="text" value="{{ camera }}", readonly>
                                 <label>{{ camera }}</label>
-                            </div>
+                            </div >
                             <div class="col-xs-6">
                                 <button type="button" class="btn btn-primary">Add</button>
                             </div>

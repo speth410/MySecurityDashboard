@@ -14,6 +14,8 @@ print_lock = threading.Lock()
 
 cameras = []
 
+port_num = 8554
+
 class VideoCamera(object):
     stream_url = ""
     stream_name = ""
@@ -63,11 +65,11 @@ def portscan(host):
    # try to connect
    try:
       # create/open connection
-      conx = s.connect((host, 8554))
+      conx = s.connect((host, port_num))
       
       # don't let thread contention screw up printing
       with print_lock:
-         camera = host + ':8554'
+         camera = host + ':' + str(port_num)
          if camera not in cameras:
             cameras.append(camera)
         
@@ -89,11 +91,11 @@ def threader():
       q.task_done()
 
 
-def scanNetwork():
+def scanNetwork(ip=None, port=None):
+   
+   base_ip = ip
 
-   #cameras = []
-   base_ip = "192.168.0."
-   print ('Scanning Network for Open Ports: ', base_ip)
+   print ('Scanning Network for Devices: ', base_ip, ":", port_num)
     
    startTime = time.time()
     
