@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,21 +26,23 @@ SECRET_KEY = 'r70q1$rf^tugbh621jl$we=y#&mo&mk%#_ro$1v5!+-f)+6lf8'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["192.168.0.28"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
     
-    'dashboard.apps.DashboardConfig',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'Pi_Website',
+    'Pi_Website.dashboard',
+    #'dashboard.apps.DashboardConfig',
 ]
 
 MIDDLEWARE = [
@@ -52,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'Pi_Website.urls'
+ROOT_URLCONF = 'Pi_Website.Pi_Website.urls'
 
 TEMPLATES = [
     {
@@ -121,4 +124,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 lOGIN_REDIRECT_URL = '/dashboard/'

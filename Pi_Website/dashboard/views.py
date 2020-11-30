@@ -77,11 +77,11 @@ def video_feed(request):
 
     return StreamingHttpResponse(streams[0].gen_frames(), content_type='multipart/x-mixed-replace; boundary=frame')
 
-
+@login_required(login_url='login/')
 def dashboard(request):
 
     cameras = {'cameras': util.scanNetwork()}
-    return render(request, 'dashboard/dashboard.html')
+    return render(request, 'dashboard/dashboard.html', cameras)
     #camera.release()
     #cv2.destroyAllWindows()
     #cameras = {'cameras': util.scanNetwork()}
@@ -92,17 +92,13 @@ def view_cameras(request):
     return render(request, 'dashboard/view_cameras.html')
 
 def user_login(request):
-    #return render(request, 'dashboard/login.html')
-    #return redirect('dashboard:home')
-    #test
+
     if request.method == 'POST':
         # Process the request if posted data are available
         username = request.POST['username']
         password = request.POST['password']
         # Check username and password combination if correct
         user = authenticate(username=username, password=password)
-        return redirect('dashboard:home')
-            
 
         #user entered some data into fields
         if user is not None:
@@ -112,13 +108,14 @@ def user_login(request):
             return render(request, 'dashboard/dashboard.html')
         else:
             # Incorrect credentials, let's throw an error to the screen.
-            return render(request, '', {'error_message': 'Incorrect username and / or password.'})
+            return render(request, 'dashboard/login.html', {'error_message': 'Incorrect username and / or password.'})
     else:
         # No post data availabe, let's just show the page to the user.
         return render(request, 'dashboard/login.html')
 
+@login_required(login_url='login/')
 def baseView(request):
-    return render(request, 'dashboard/base.html')
+    return render(request, 'dashboard/dashboard.html')
 
 def registerView(request):
 
@@ -127,7 +124,6 @@ def registerView(request):
         if form.is_valid():
             form.save()
             return redirect('dashboard:user_login')
-            #return render(request, 'dashboard/login.html')
     else:
         form = UserCreationForm()
 
